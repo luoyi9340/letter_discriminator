@@ -1,0 +1,53 @@
+#   手写字母识别（tensorflow2练手程序）
+letter:
+   #   图片目录
+   in: /Users/irenebritney/Desktop/vcode/letter
+   #   读取多少个图片（从标注文件读取，标注数量少于此数量时全读）
+   count: 100000
+   #   标注文件目录
+   annotation: /Users/irenebritney/Desktop/vcode/annotation/letter.txt
+   
+   
+#   训练相关配置
+train:
+   #   训练集占比（0 ~ 1之间，3个比例加起来最好=1）
+   rate_train: 0.8
+   #   验证集占比
+   rate_val: 0.1
+   #   测试集占比
+   rate_test: 0.1
+   #   批量大小
+   batch_size: 256
+   #   tensorboard.dir
+   tensorboard_dir: /Users/irenebritney/Desktop/vcode/tensorboard
+
+#   模型相关
+model:
+   #   LeNet模型保存目录（th模式貌似有问题，只能用h5模式）
+   lenet_save_weights_path: /Users/irenebritney/Desktop/vcode/models/lenet_5.h5
+   #   AlexNet模型参数保存目录
+   alexnet_save_weights_path: /Users/irenebritney/Desktop/vcode/models/alexnet.h5
+   #   VGG16模型参数保存目录
+   vggnet_save_weights_path: /Users/irenebritney/Desktop/vcode/models/vggnet_16.h5
+   #   GoogleLeNet模型参数保存目录
+   googlelenet_v1_save_weights_path: /Users/irenebritney/Desktop/vcode/models/googlelenet_v1.h5
+   googlelenet_v2_save_weights_path: /Users/irenebritney/Desktop/vcode/models/googlelenet_v2.h5
+   #   ResNet模型参数保存目录
+   resnet_18_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_18.h5
+   resnet_50_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_50.h5
+   
+   
+   
+#   日志相关配置
+logs:
+   #   数据集相关日志
+   dataset: 
+      #   日志输出级别
+      level: "INFO"
+      #   日志输出目录（/开头表示机器绝对目录，非/开头表示项目根目录）
+      out: "logs/dataset.log"
+      #   该log是否打印到控制台
+      console: true
+      #   log输出格式
+      formatter: "%(asctime)s-%(name)s-%(levelname)s-%(message)s"
+      
