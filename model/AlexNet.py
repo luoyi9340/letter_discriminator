@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-  
 '''
 AlexNet网络结构
     相比于LeNet，AlexNet主要改进：

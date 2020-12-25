@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-  
 '''
 GoogleLeNet网络
 简介：

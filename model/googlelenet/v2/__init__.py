@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-  
 '''
 Inception_V2模块
     结构如下：

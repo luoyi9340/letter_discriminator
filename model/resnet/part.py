@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-  
 '''
 ResNet残差网络-零件
     - BasicBlock

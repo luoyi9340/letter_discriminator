@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-  
 '''
 训练模型
 
@@ -5,6 +6,14 @@ Created on 2020年12月16日
 
 @author: irenebritney
 '''
+import sys
+import os
+#    取项目根目录
+ROOT_PATH = os.path.abspath(os.path.dirname(__file__)).split('LetterRecognizer')[0]
+ROOT_PATH = ROOT_PATH + "LetterRecognizer"
+sys.path.append(ROOT_PATH)
+
+
 from model.LeNet import LeNet_5
 from model.AlexNet import AlexNet
 from model.googlelenet.v1.GoogleLeNet import GoogleLeNet_V1
@@ -17,7 +26,7 @@ from utils.Conf import TRAIN, MODEL
 
 #    准备数据集
 X, Y = dataset.load_all_anno()
-X = dataset.load_image(X, preprocess=lambda x:(x - 0.5)*2)             #    将x归到均值0方差1的分布中
+X = dataset.load_image(X, preprocess=lambda x:x)             #    将x归到均值0方差1的分布中
 Y = dataset.load_one_hot(Y)
 X_train, Y_train, X_val, Y_val, X_test, Y_test = dataset.original_db_distribution(X, Y, rate_train=0.95, rate_val=0.05, rate_test=0)
 print("X_train.len:" + str(len(X_train)), 
@@ -51,7 +60,7 @@ print("X_train.len:" + str(len(X_train)),
 #    初始化ResNet模型
 # model = ResNet_18(learning_rate=0.9)
 # net_weights_save_path = MODEL.get_resnet_18_save_weights_path()
-model = ResNet_50()
+model = ResNet_18()
 net_weights_save_path = MODEL.get_resnet_50_save_weights_path()
 
 
