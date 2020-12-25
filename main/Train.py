@@ -60,7 +60,7 @@ print("X_train.len:" + str(len(X_train)),
 #    初始化ResNet模型
 # model = ResNet_18(learning_rate=0.9)
 # net_weights_save_path = MODEL.get_resnet_18_save_weights_path()
-model = ResNet_18()
+model = ResNet_50()
 net_weights_save_path = MODEL.get_resnet_50_save_weights_path()
 
 
