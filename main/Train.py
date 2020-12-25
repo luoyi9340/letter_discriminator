@@ -26,7 +26,7 @@ from utils.Conf import TRAIN, MODEL
 
 #    准备数据集
 X, Y = dataset.load_all_anno()
-X = dataset.load_image(X, preprocess=lambda x:x)             #    将x归到均值0方差1的分布中
+X = dataset.load_image(X, preprocess=lambda x:(x - 0.5) * 2)             #    将x归到均值0方差1的分布中
 Y = dataset.load_one_hot(Y)
 X_train, Y_train, X_val, Y_val, X_test, Y_test = dataset.original_db_distribution(X, Y, rate_train=0.95, rate_val=0.05, rate_test=0)
 print("X_train.len:" + str(len(X_train)), 
