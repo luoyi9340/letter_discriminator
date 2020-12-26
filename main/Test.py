@@ -6,6 +6,13 @@ Created on 2020年12月17日
 
 @author: irenebritney
 '''
+import sys
+import os
+#    取项目根目录
+ROOT_PATH = os.path.abspath(os.path.dirname(__file__)).split('LetterRecognizer')[0]
+ROOT_PATH = ROOT_PATH + "LetterRecognizer"
+sys.path.append(ROOT_PATH)
+
 import matplotlib.pyplot as plot
 import numpy as np
 

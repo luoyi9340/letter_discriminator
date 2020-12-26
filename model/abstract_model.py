@@ -10,9 +10,6 @@ import abc
 import tensorflow as tf
 import numpy as np
 
-import random
-from utils.Alphabet import index_category
-import matplotlib.pyplot as plot
 
 #    模型类的公共行为
 class AModel(metaclass=abc.ABCMeta):
@@ -85,8 +82,44 @@ class AModel(metaclass=abc.ABCMeta):
         pass
     
     
+    #    训练模型（用tensor_db做数据源）
+    def train_tensor_db(self, db_train, 
+                        db_val=None, val_split=None,
+                        batch_size=32, 
+                        epochs=5,
+                        auto_save_weights_after_traind=True,
+                        auto_save_file_path=None,
+                        auto_learning_rate_schedule=True,
+                        auto_tensorboard=True,
+                        auto_tensorboard_dir=None):
+        '''训练模型
+            @param db_train: 训练集
+            @param db_val: 验证集
+            @param val_split: 验证集占比，与db_val二选一
+            @param batch_size: 批量喂数据大小
+            @param epochs: epoch次数
+            @param auto_save_weights_after_traind: 是否在训练完成后自动保存（默认True）
+            @param auto_save_file_path: 当auto_save_epoch为true时生效，保存参数文件path
+            @param auto_learning_rate_schedule: 是否动态调整学习率
+            @param auto_tensorboard: 是否开启tensorboard监听（一款tensorflow自带的可视化训练过程工具）
+            @param auto_tensorboard_dir: tensorboard日志写入目录
+            @return: history
+        '''
+        #    初始化模型的各种回调
+        callbacks = self.callbacks(auto_save_weights_after_traind, auto_save_file_path, 
+                                   auto_learning_rate_schedule, 
+                                   auto_tensorboard, auto_tensorboard_dir)
+        
+        his = self._net.fit(x=db_train,
+                                validation_data=db_val,
+                                batch_size=batch_size, 
+                                epochs=epochs, 
+                                verbose=1, 
+                                callbacks=callbacks,
+                                shuffle=False)
+        return his
     #    训练模型
-    def train(self, X_train, Y_train, 
+    def train(self, X_train, Y_train,
                     X_val, Y_val,
                     batch_size=32, 
                     epochs=5,
@@ -109,6 +142,35 @@ class AModel(metaclass=abc.ABCMeta):
             @param auto_tensorboard: 是否开启tensorboard监听（一款tensorflow自带的可视化训练过程工具）
             @param auto_tensorboard_dir: tensorboard日志写入目录
             @return: history
+        '''
+        #    初始化模型的各种回调
+        callbacks = self.callbacks(auto_save_weights_after_traind, auto_save_file_path, 
+                                   auto_learning_rate_schedule, 
+                                   auto_tensorboard, auto_tensorboard_dir)
+        
+        his = self._net.fit(x=X_train, y=Y_train,
+                                batch_size=batch_size, 
+                                epochs=epochs, 
+                                verbose=1, 
+                                validation_data=(X_val, Y_val),
+                                callbacks=callbacks,
+                                shuffle=False)
+        return his
+
+    #    模型回调
+    def callbacks(self, auto_save_weights_after_traind=True, auto_save_file_path=None, 
+                        auto_learning_rate_schedule=True,
+                        auto_tensorboard=True,
+                        auto_tensorboard_dir=None,
+                        batch_size=128
+                        ):
+        '''初始化各种回调
+            @param auto_save_weights_after_traind: 是否在每次epoch完成时保存模型
+            @param auto_save_file_path: 保存模型路径(**/*,h5)
+            @param auto_learning_rate_schedule: 是否开启自动更新学习率
+            @param auto_tensorboard: 是否开启tensorboard
+            @param auto_tensorboard_dir: tensorboard日志保存目录
+            @param batch_size: tensorboard多少个数据后刷新
         '''
         #    训练期间的回调
         callbacks = []
@@ -161,16 +223,12 @@ class AModel(metaclass=abc.ABCMeta):
                                                          )
             callbacks.append(tensorboard)
             pass
-        
-        his = self._net.fit(x=X_train, y=Y_train,
-                                batch_size=batch_size, 
-                                epochs=epochs, 
-                                verbose=1, 
-                                validation_data=(X_val, Y_val),
-                                callbacks=callbacks,
-                                shuffle=False)
-        return his
+        return callbacks
 
+    #    打印模型信息
+    def show_info(self):
+        self._net.summary()
+        pass
 
     '''以下是抽象方法定义
         python毕竟不是Java，找不到更多约束了。。。
@@ -193,18 +251,5 @@ class AModel(metaclass=abc.ABCMeta):
         pass
     pass
 
-
-#    随机测试几个数据
-def test_data(X, Y):
-    print(len(X), len(Y))
-    
-    idx = random.randint(0, len(Y))
-    x = X[idx]
-    y = Y[idx]
-    print(index_category(np.argmax(y)))
-    plot.imshow(x, 'gray')
-    plot.show()
-    
-    pass
 
 

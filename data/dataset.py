@@ -22,7 +22,7 @@ from utils.Alphabet import alphabet, category_index
 logger = LoggerFactory.get_logger('dataset')
 
 
-#    加载全部原始数据
+#    加载全部原始数据（慎用，次方法很吃内存）
 def load_all_anno(count=LETTER.get_letter_count()):
     '''加载全部原始数据
         从配置文件的letter.anno加载所有原始标记数据
@@ -118,31 +118,50 @@ def original_db_distribution(X, Y,
 
 
 
-
+#    单个数据one_hot
+def one_hot(num):
+    y = np.zeros(shape=len(alphabet), dtype=np.int8)
+    y[num] = 1
+    return y
+#    db_generator
+def db_generator(x_filedir, y_filepath, count, x_preprocess, y_preprocess):
+    '''数据生成器
+    '''
+    c = 0
+    for line in open(y_filepath, mode='r', encoding='utf-8'):
+        #    控制读取数量
+        if (c >= count): break
+        c += 1
+        #    读json格式
+        d = json.loads(line)
+        #    读取图片，并在末尾追加维度（整形为(100,100,1)），并做预处理
+        x = plot.imread(x_filedir + '/' + d['filename'] + '.png', format)
+        x = np.expand_dims(x, axis=-1)
+        x = x_preprocess(x)
+        #    y转数字，并做预处理
+        y = category_index(d['letter'])
+        y = y_preprocess(y)
+        yield x, y
+    pass
 #    加载为tensorflow数据集
-def load_tensor_db(X, Y, batch_size=TRAIN.get_train_batch_size()):
+def load_tensor_db(x_filedir=LETTER.get_letter_in(),
+                   y_filepath=LETTER.get_letter_anno(), 
+                   batch_size=TRAIN.get_train_batch_size(), 
+                   count=LETTER.get_letter_count(),
+                   x_preprocess=lambda x:(x - 0.5) * 2,
+                   y_preprocess=one_hot):
     '''加载为tensor数据集
-    
-    @param X: 训练数据集
-    @param Y: 训练数据标签集
-    @param batch_size: 批量大小
-    @return: tf.data.Dataset
+        @param x_filedir: 训练图片路径
+        @param y_filepath: 标签文件路径
+        @param batch_size: 批量大小
+        @param count: 数据上限
+        @param x_preprocess: 图片数据预处理
+        @param y_preprocess: 标签数据预处理
+        @return: tf.data.Dataset
     '''
-    db_train = tf.data.Dataset.from_tensor_slices((X, Y))
-    #    shuffle打乱数据顺序，map对数据预处理，batch设置批量大小
-    db_train.shuffle(1000).map(preprocess).batch(batch_size)
-    return db_train
-#    tensorflow数据集每条数据前置处理
-def preprocess(x, y):
-    '''数据前置处理
-        1 从图片路径加载为像素矩阵
-        2 像素矩阵
-    '''
-    #    从图片路径加载为像素矩阵
-    x = tf.io.read_file(x)
-    x = tf.image.decode_png(x, channels=1)              #    本次数据全是灰度模式
-    x = tf.cast(x, dtype=tf.float32) / 255.             #    数据缩放到0~1之间
-    return x, y
-
+    db = tf.data.Dataset.from_generator(lambda :db_generator(x_filedir, y_filepath, count, x_preprocess, y_preprocess), 
+                                        output_types=(tf.float32, tf.int8),
+                                        output_shapes=(tf.TensorShape([100, 100, 1]), tf.TensorShape([46]))).batch(batch_size)
+    return db
 
 

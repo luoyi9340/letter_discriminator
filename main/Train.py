@@ -21,20 +21,22 @@ from model.googlelenet.v2.GoogleLeNet import GoogleLeNet_V2
 from model.VGGNet import VGGNet_16
 from model.resnet.models import ResNet_18, ResNet_50
 from data import dataset
-from utils.Conf import TRAIN, MODEL
+from utils.Conf import TRAIN, MODEL, LETTER
 
 
 #    准备数据集
-X, Y = dataset.load_all_anno()
-X = dataset.load_image(X, preprocess=lambda x:(x - 0.5) * 2)             #    将x归到均值0方差1的分布中
-Y = dataset.load_one_hot(Y)
-X_train, Y_train, X_val, Y_val, X_test, Y_test = dataset.original_db_distribution(X, Y, rate_train=0.95, rate_val=0.05, rate_test=0)
-print("X_train.len:" + str(len(X_train)), 
-      " Y_train.len:" + str(len(Y_train)), 
-      " X_val.len:" + str(len(X_val)),
-      " Y_val.len:" + str(len(Y_val)))
-# db_train = dataset.load_tensor_db(X_train, Y_train)
-# db_val = dataset.load_tensor_db(X_val, Y_val)
+# X, Y = dataset.load_all_anno()
+# X = dataset.load_image(X, preprocess=lambda x:(x - 0.5) * 2)             #    将x归到均值0方差1的分布中
+# Y = dataset.load_one_hot(Y)
+# X_train, Y_train, X_val, Y_val, X_test, Y_test = dataset.original_db_distribution(X, Y, rate_train=0.95, rate_val=0.05, rate_test=0)
+# print("X_train.len:" + str(len(X_train)), 
+#       " Y_train.len:" + str(len(Y_train)), 
+#       " X_val.len:" + str(len(X_val)),
+#       " Y_val.len:" + str(len(Y_val)))
+
+count = LETTER.get_letter_count()
+batch_size = TRAIN.get_train_batch_size()
+db_train = dataset.load_tensor_db(count=count, batch_size=batch_size)
 # db_test = dataset.load_tensor_db(X_test, Y_test)
 
 
@@ -63,15 +65,16 @@ print("X_train.len:" + str(len(X_train)),
 model = ResNet_50()
 net_weights_save_path = MODEL.get_resnet_50_save_weights_path()
 
+model.show_info()
 
 #    喂数据
-his = model.train(X_train=X_train, Y_train=Y_train, 
-                  X_val=X_val, Y_val=Y_val, 
-                  batch_size=TRAIN.get_train_batch_size(),
-                  auto_save_weights_after_traind=True,
-                  auto_save_file_path=net_weights_save_path,
-                  auto_tensorboard=True,
-                  auto_tensorboard_dir=TRAIN.get_tensorboard_dir())
+his = model.train_tensor_db(db_train=db_train, 
+                              val_split=0.9, 
+                              batch_size=TRAIN.get_train_batch_size(),
+                              auto_save_weights_after_traind=True,
+                              auto_save_file_path=net_weights_save_path,
+                              auto_tensorboard=True,
+                              auto_tensorboard_dir=TRAIN.get_tensorboard_dir())
 print(his)
 
 #    保存模型参数（训练过程中会自动保存）
