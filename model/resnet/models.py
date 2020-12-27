@@ -224,7 +224,7 @@ class ResNet_50(AModel):
         net.add(tf.keras.models.Sequential([
                 tf.keras.layers.GlobalAveragePooling2D(name='Layer_2_GAP'),
                 tf.keras.layers.Flatten(),
-                tf.keras.layers.Dense(name='Layer_2_FC', 46, activation='softmax')
+                tf.keras.layers.Dense(name='Layer_2_FC', units=46, activation='softmax')
             ], name='Layer_2'))
         pass
     pass
