@@ -19,7 +19,7 @@ from model.AlexNet import AlexNet
 from model.googlelenet.v1.GoogleLeNet import GoogleLeNet_V1
 from model.googlelenet.v2.GoogleLeNet import GoogleLeNet_V2
 from model.VGGNet import VGGNet_16
-from model.resnet.models import ResNet_18, ResNet_50
+from model.resnet.models import ResNet_18, ResNet_34, ResNet_50
 from data import dataset
 from utils.Conf import TRAIN, MODEL, LETTER
 
@@ -62,8 +62,10 @@ db_train = dataset.load_tensor_db(count=count, batch_size=batch_size)
 #    初始化ResNet模型
 # model = ResNet_18(learning_rate=0.9)
 # net_weights_save_path = MODEL.get_resnet_18_save_weights_path()
-model = ResNet_50()
-net_weights_save_path = MODEL.get_resnet_50_save_weights_path()
+model = ResNet_34()
+net_weights_save_path = MODEL.get_resnet_34_save_weights_path()
+# model = ResNet_50()
+# net_weights_save_path = MODEL.get_resnet_50_save_weights_path()
 
 model.show_info()
 

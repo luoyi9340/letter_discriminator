@@ -32,9 +32,4 @@ class SubClass1(AClass):
     pass
 
 
-a = (1, 1, 52)
-b = (None, 1, 1, 52)
-b = tuple(filter(None, b))
-print(a == b)
-
 

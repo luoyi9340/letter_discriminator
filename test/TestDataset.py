@@ -17,19 +17,29 @@ from utils.Alphabet import category_index, index_category
 
 
 count = 10
-batch_size=2
+batch_size=1
 count_batch_train = int(count / batch_size * 0.8)
-db = ds.load_tensor_db(count=10, batch_size=2)
+db = ds.load_tensor_db(count=count, batch_size=batch_size)
 #    前count_batch_train个batch用做训练
 db_train = db.take(count_batch_train)
 #    前count_batch_train个batch往后所有数据用作训练
 db_val = db.skip(count_batch_train)
 
 
-print("db_train:")
-for x, y in db_train:
-    print(x.shape, y.shape)
+idx = random.randint(0, count)
+i = 0
+for x, y in db:
+    i += 1
+    if (i <= idx): continue
 
-print("db_val:")
-for x, y in db_val:
-    print(x.shape, y.shape)
+        
+    y = y.numpy()[0]
+    y = np.argmax(y)
+    print(index_category(y))
+    
+    x = x.numpy()[0]
+    plot.imshow(x, 'gray')
+    plot.show()
+    break
+    pass
+

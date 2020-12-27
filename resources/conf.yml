@@ -34,6 +34,7 @@ model:
    googlelenet_v2_save_weights_path: /Users/irenebritney/Desktop/vcode/models/googlelenet_v2.h5
    #   ResNet模型参数保存目录
    resnet_18_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_18.h5
+   resnet_34_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_34.h5
    resnet_50_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_50.h5
    
    

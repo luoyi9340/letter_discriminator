@@ -16,4 +16,4 @@ r = np.mean(r)
 print(r)
 
 
-print(math.e ** -3)
+print(math.e ** -3.9334)

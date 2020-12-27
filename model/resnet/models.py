@@ -81,7 +81,7 @@ class ResNet_18(AModel):
 
     #    装配模型
     def assembling(self, net):
-        kernel_initializer = 'uniform'
+        kernel_initializer = tf.keras.initializers.he_normal()
         
         #    layer1
         net.add(tf.keras.models.Sequential([
@@ -108,6 +108,114 @@ class ResNet_18(AModel):
                 tf.keras.layers.GlobalAveragePooling2D(),
                 tf.keras.layers.Flatten(),
                 tf.keras.layers.Dense(46, activation='softmax')
+            ], name='layer_2'))
+        pass
+    pass
+
+
+
+#    ResNet_34
+class ResNet_34(AModel):
+    '''ResNet34网络结构：
+        输入：100 * 100 * 1
+        -----------------layer 1-------------------
+        Conv:
+            kernel_size=[3*3*32] stride=2 padding=0 active=relu norm=bn
+            out=[49 * 49 * 32]
+        -----------------BasicBlock 1*3-------------------
+        Conv:[3*3*32] stride=1 padding=1 active=relu norm=bn out=[49 * 49 * 32]
+        Conv:[3*3*32] stride=1 padding=1 norm=bn out=[49 * 49 * 32]   
+        shortcut: out=[49 * 49 * 32]   
+        active: relu
+        times: 3（该层重复3次）
+        -----------------BasicBlock 2-------------------
+        Conv:[3*3*64] stride=2 padding=1 active=relu norm=bn out=[25 * 25 *64]
+        Conv:[3*3*64] stride=1 padding=1 norm=bn out=[25 * 25 * 64]   
+        shortcut: out=[25 * 25 * 64]   
+        active: relu
+        -----------------BasicBlock 2*3-------------------
+        Conv:[3*3*64] stride=1 padding=1 active=relu norm=bn out=[25 * 25 *64]
+        Conv:[3*3*64] stride=1 padding=1 norm=bn out=[25 * 25 * 64]   
+        shortcut: out=[25 * 25 * 64]   
+        active: relu
+        times: 3（该层重复3次）
+        -----------------BasicBlock 3-------------------
+        Conv:[3*3*128] stride=2 padding=1 active=relu norm=bn out=[13 * 13 *128]
+        Conv:[3*3*128] stride=1 padding=1 norm=bn out=[13 * 13 * 128]   
+        shortcut: out=[13 * 13 * 128]   
+        active: relu
+        -----------------BasicBlock 3*5-------------------
+        Conv:[3*3*128] stride=1 padding=1 active=relu norm=bn out=[13 * 13 *128]
+        Conv:[3*3*128] stride=1 padding=1 norm=bn out=[13 * 13 * 128]   
+        shortcut: out=[13 * 13 * 128]   
+        active: relu
+        times: 5（该层重复5次）
+        -----------------BasicBlock 4-------------------
+        Conv:[3*3*256] stride=2 padding=1 active=relu norm=bn out=[7 * 7 * 256]
+        Conv:[3*3*256] stride=1 padding=1 norm=bn out=[7 * 7 * 256]   
+        shortcut: out=[7 * 7 * 256]   
+        active: relu
+        -----------------BasicBlock 4*2-------------------
+        Conv:[3*3*256] stride=1 padding=1 active=relu norm=bn out=[7 * 7 * 256]
+        Conv:[3*3*256] stride=1 padding=1 norm=bn out=[7 * 7 * 256]   
+        shortcut: out=[7 * 7 * 256]   
+        active: relu
+        times: 2（该层重复2次）
+        -----------------layer 2-------------------
+        Global AvgPooling: out=[1*1*256]
+        FC: w=[256 * 1000] active=Softmax
+    '''
+    def __init__(self, learning_rate=0.9):
+        super(ResNet_34, self).__init__(name='ResNet_34', learning_rate=learning_rate)
+        pass
+    
+    #    子类必须指明梯度更新方式
+    def optimizer(self, net, learning_rate=0.9):
+        return tf.optimizers.Adam(learning_rate=learning_rate)
+
+    #    子类必须指明损失函数
+    def loss(self):
+        return tf.losses.categorical_crossentropy
+
+    #    子类必须指明评价方式
+    def metrics(self):
+        return [tf.metrics.CategoricalAccuracy()]
+
+    #    装配模型
+    def assembling(self, net):
+        kernel_initializer = tf.keras.initializers.he_normal()
+        
+        #    layer1
+        net.add(tf.keras.models.Sequential([
+                tf.keras.layers.Conv2D(name='Layer_1_Conv_1', filters=32, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer),
+                tf.keras.layers.BatchNormalization(),
+                tf.keras.layers.ReLU()
+            ], name='layer_1'))
+        #    BasicBlock 1
+        net.add(BasicBlock(name='BasicBlock_0_0', filters=[32, 32], strides=1, input_shape=(49, 49, 32), output_shape=(49, 49, 32), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_0_1', filters=[32, 32], strides=1, input_shape=(49, 49, 32), output_shape=(49, 49, 32), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_0_2', filters=[32, 32], strides=1, input_shape=(49, 49, 32), output_shape=(49, 49, 32), kernel_initializer=kernel_initializer))
+        #    BasicBlock 2
+        net.add(BasicBlock(name='BasicBlock_1_0', filters=[64, 64], strides=2, input_shape=(49, 49, 32), output_shape=(25, 25, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_1', filters=[64, 64], strides=1, input_shape=(25, 25, 64), output_shape=(25, 25, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_2', filters=[64, 64], strides=1, input_shape=(25, 25, 64), output_shape=(25, 25, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_3', filters=[64, 64], strides=1, input_shape=(25, 25, 64), output_shape=(25, 25, 64), kernel_initializer=kernel_initializer))
+        #    BasicBlock 3
+        net.add(BasicBlock(name='BasicBlock_2_0', filters=[128, 128], strides=2, input_shape=(25, 25, 64), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_1', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_2', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_3', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_4', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_5', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
+        #    BasicBlock 4
+        net.add(BasicBlock(name='BasicBlock_3_0', filters=[256, 256], strides=2, input_shape=(13, 13, 128), output_shape=(7, 7, 256), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_1', filters=[256, 256], strides=1, input_shape=(7, 7, 256), output_shape=(7, 7, 256), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_2', filters=[256, 256], strides=1, input_shape=(7, 7, 256), output_shape=(7, 7, 256), kernel_initializer=kernel_initializer))
+        #    layer2
+        net.add(tf.keras.models.Sequential([
+                tf.keras.layers.GlobalAveragePooling2D(),
+                tf.keras.layers.Flatten(),
+                tf.keras.layers.Dense(name='Layer_2_FC', units=46, activation='softmax')
             ], name='layer_2'))
         pass
     pass
