@@ -187,30 +187,30 @@ class ResNet_34(AModel):
         
         #    layer1
         net.add(tf.keras.models.Sequential([
-                tf.keras.layers.Conv2D(name='Layer_1_Conv_1', filters=32, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer),
+                tf.keras.layers.Conv2D(name='Layer_1_Conv_1', filters=16, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer),
                 tf.keras.layers.BatchNormalization(),
                 tf.keras.layers.ReLU()
             ], name='layer_1'))
         #    BasicBlock 1
-        net.add(BasicBlock(name='BasicBlock_0_0', filters=[32, 32], strides=1, input_shape=(49, 49, 32), output_shape=(49, 49, 32), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_0_1', filters=[32, 32], strides=1, input_shape=(49, 49, 32), output_shape=(49, 49, 32), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_0_2', filters=[32, 32], strides=1, input_shape=(49, 49, 32), output_shape=(49, 49, 32), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_0_0', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_0_1', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_0_2', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer))
         #    BasicBlock 2
-        net.add(BasicBlock(name='BasicBlock_1_0', filters=[64, 64], strides=2, input_shape=(49, 49, 32), output_shape=(25, 25, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_1_1', filters=[64, 64], strides=1, input_shape=(25, 25, 64), output_shape=(25, 25, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_1_2', filters=[64, 64], strides=1, input_shape=(25, 25, 64), output_shape=(25, 25, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_1_3', filters=[64, 64], strides=1, input_shape=(25, 25, 64), output_shape=(25, 25, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_0', filters=[32, 32], strides=2, input_shape=(49, 49, 16), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_1', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_2', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_3', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
         #    BasicBlock 3
-        net.add(BasicBlock(name='BasicBlock_2_0', filters=[128, 128], strides=2, input_shape=(25, 25, 64), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_1', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_2', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_3', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_4', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_5', filters=[128, 128], strides=1, input_shape=(13, 13, 128), output_shape=(13, 13, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_0', filters=[64, 64], strides=2, input_shape=(25, 25, 32), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_1', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_2', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_3', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_4', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_5', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
         #    BasicBlock 4
-        net.add(BasicBlock(name='BasicBlock_3_0', filters=[256, 256], strides=2, input_shape=(13, 13, 128), output_shape=(7, 7, 256), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_3_1', filters=[256, 256], strides=1, input_shape=(7, 7, 256), output_shape=(7, 7, 256), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_3_2', filters=[256, 256], strides=1, input_shape=(7, 7, 256), output_shape=(7, 7, 256), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_0', filters=[128, 128], strides=2, input_shape=(13, 13, 64), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_1', filters=[128, 128], strides=1, input_shape=(7, 7, 128), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_2', filters=[128, 128], strides=1, input_shape=(7, 7, 128), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer))
         #    layer2
         net.add(tf.keras.models.Sequential([
                 tf.keras.layers.GlobalAveragePooling2D(),
