@@ -83,8 +83,8 @@ class AModel(metaclass=abc.ABCMeta):
     
     
     #    训练模型（用tensor_db做数据源）
-    def train_tensor_db(self, db_train, 
-                        db_val=None, val_split=None,
+    def train_tensor_db(self, db_train=None, 
+                        db_val=None,
                         batch_size=32, 
                         epochs=5,
                         auto_save_weights_after_traind=True,
@@ -114,7 +114,7 @@ class AModel(metaclass=abc.ABCMeta):
         db_train.repeat(epochs)
         
         his = self._net.fit(x=db_train,
-                                validation_data=db_val, val_split=val_split,
+                                validation_data=db_val, 
                                 batch_size=batch_size, 
                                 verbose=1, 
                                 epochs=epochs,

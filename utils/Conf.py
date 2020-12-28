@@ -26,7 +26,9 @@ def load_conf_yaml():
     c = yaml.load(fr)
     
     #    读取letter相关配置项
-    letter = Letter(c['letter']['in'], c['letter']['count'], c['letter']['annotation'])
+    letter = Letter(c['letter']['in_train'], c['letter']['count_train'], c['letter']['label_train'],
+                    c['letter']['in_val'], c['letter']['count_val'], c['letter']['label_val'],
+                    c['letter']['in_test'], c['letter']['count_test'], c['letter']['label_test'])
     #    读取train相关配置项
     train = Train(c['train']['rate_train'], 
                   c['train']['rate_val'], 
@@ -49,15 +51,30 @@ def load_conf_yaml():
 
 #    手写字母数据集。为了与Java的风格保持一致
 class Letter:
-    def __init__(self, letter_in="", letter_count=50000, letter_anno=""):
-        self.__letter_in = letter_in
-        self.__letter_count = letter_count
-        self.__letter_anno = letter_anno
+    def __init__(self, in_train="", count_train=50000, label_train="", in_val="", count_val=10000, label_val="", in_test="", count_test=10000, label_test=""):
+        self.__in_train = in_train
+        self.__count_train = count_train
+        self.__label_train = label_train
+        
+        self.__in_val = in_val
+        self.__count_val = count_val
+        self.__label_val = label_val
+        
+        self.__in_test = in_test
+        self.__count_test = count_test
+        self.__label_test = label_test
         pass
+    def get_in_train(self): return self.__in_train
+    def get_count_train(self): return self.__count_train
+    def get_label_train(self): return self.__label_train
     
-    def get_letter_in(self): return self.__letter_in
-    def get_letter_count(self): return self.__letter_count
-    def get_letter_anno(self): return self.__letter_anno
+    def get_in_val(self): return self.__in_val
+    def get_count_val(self): return self.__count_val
+    def get_label_val(self): return self.__label_val    
+    
+    def get_in_test(self): return self.__in_test
+    def get_count_test(self): return self.__count_test
+    def get_label_test(self): return self.__label_test
     pass
 #    训练相关配置。为了与Java风格保持一致
 class Train:

@@ -25,19 +25,14 @@ from utils.Conf import TRAIN, MODEL, LETTER
 
 
 #    准备数据集
-# X, Y = dataset.load_all_anno()
-# X = dataset.load_image(X, preprocess=lambda x:(x - 0.5) * 2)             #    将x归到均值0方差1的分布中
-# Y = dataset.load_one_hot(Y)
-# X_train, Y_train, X_val, Y_val, X_test, Y_test = dataset.original_db_distribution(X, Y, rate_train=0.95, rate_val=0.05, rate_test=0)
-# print("X_train.len:" + str(len(X_train)), 
-#       " Y_train.len:" + str(len(Y_train)), 
-#       " X_val.len:" + str(len(X_val)),
-#       " Y_val.len:" + str(len(Y_val)))
-
-count = LETTER.get_letter_count()
-batch_size = TRAIN.get_train_batch_size()
-db_train = dataset.load_tensor_db(count=count, batch_size=batch_size)
-# db_test = dataset.load_tensor_db(X_test, Y_test)
+db_train = dataset.load_tensor_db(x_filedir=LETTER.get_in_train(), 
+                                  y_filepath=LETTER.get_label_train(), 
+                                  batch_size=TRAIN.get_train_batch_size(),
+                                  count=LETTER.get_count_train())
+db_val = dataset.load_tensor_db(x_filedir=LETTER.get_in_val(), 
+                                y_filepath=LETTER.get_label_val(), 
+                                batch_size=TRAIN.get_train_batch_size(),
+                                count=LETTER.get_count_val())
 
 
 #    初始化模型
@@ -71,7 +66,7 @@ model.show_info()
 
 #    喂数据
 his = model.train_tensor_db(db_train=db_train, 
-                              val_split=0.9, 
+                              db_val=db_val, 
                               batch_size=TRAIN.get_train_batch_size(),
                               epochs=TRAIN.get_epochs(),
                               auto_save_weights_after_traind=True,

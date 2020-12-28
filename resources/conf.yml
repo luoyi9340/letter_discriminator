@@ -1,11 +1,17 @@
 #   手写字母识别（tensorflow2练手程序）
 letter:
-   #   图片目录
-   in: /Users/irenebritney/Desktop/vcode/letter
-   #   读取多少个图片（从标注文件读取，标注数量少于此数量时全读）
-   count: 100
-   #   标注文件目录
-   annotation: /Users/irenebritney/Desktop/vcode/annotation/letter.txt
+   #   训练集相关配置
+   in_train: /Users/irenebritney/Desktop/vcode/dataset/letter/train
+   count_train: 100
+   label_train: /Users/irenebritney/Desktop/vcode/dataset/letter/train.txt
+   #   验证集相关配置
+   in_val: /Users/irenebritney/Desktop/vcode/dataset/letter/train
+   count_val: 100
+   label_val: /Users/irenebritney/Desktop/vcode/dataset/letter/train.txt
+   #   测试集相关配置
+   in_test: /Users/irenebritney/Desktop/vcode/dataset/letter/train
+   count_test: 100
+   label_test: /Users/irenebritney/Desktop/vcode/dataset/letter/train.txt
    
    
 #   训练相关配置
