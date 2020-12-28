@@ -115,6 +115,7 @@ class AModel(metaclass=abc.ABCMeta):
                                 validation_data=db_val,
                                 batch_size=batch_size, 
                                 verbose=1, 
+                                epochs=epochs,
                                 callbacks=callbacks,
                                 shuffle=False)
         return his
