@@ -22,6 +22,57 @@ from utils.Alphabet import alphabet, category_index
 logger = LoggerFactory.get_logger('dataset')
 
 
+#    加载全部原始数据（慎用，次方法很吃内存）
+def load_all_anno(count=100, x_dir=LETTER.get_in_test(), y_file_path=LETTER.get_label_test()):
+    '''加载全部原始数据
+        从配置文件的letter.anno加载所有原始标记数据
+        @return: X（图片本机绝对路径）, Y（图片标签编码0~25对应a~z，26~51对应A~Z）
+    '''
+    i = 0
+    X = []
+    Y = []
+    for line in open(y_file_path, 'r', encoding='utf-8'):
+        if (i >= count): break
+        i = i + 1
+        
+        d = json.loads(line)
+        X.append(x_dir + "/" + d['filename'] + ".png")
+        Y.append(category_index(d['letter']))
+        pass
+    
+    logger.info("load original data:" + str(i))
+    return np.array(X), np.array(Y)
+#    原始数据x加载为图片像素矩阵
+def load_image(X, preprocess=lambda x:(x - 0.5) * 2):
+    '''原始数据x的绝对路径加载为图片像素矩阵，并且归一化到0~1之间
+        @param X: 图片绝对路径list
+        @param preprocess: 像素矩阵后置处理（默认归到0均值，0~1之间）
+        @return: 每个绝对路径对应的归一化后的图片像素矩阵
+    '''
+    new_X = []
+    for i in range(len(X)):
+        mat = plot.imread(X[i])
+        mat = preprocess(mat)
+        #    整形为(w, h, 1)，灰度模式追加一个通道
+        mat = np.expand_dims(mat, -1)
+#         print(mat.shape)
+        new_X.append(mat)
+        pass
+    return np.array(new_X)
+#    原始数据y加载为one-hot编码
+def load_one_hot(Y):
+    '''索引位概率为1，其他为0
+    '''
+    new_Y = []
+    for i in range(len(Y)):
+        #    字母表长度即为分类个数
+        y = np.zeros(shape=(len(alphabet)), dtype=np.float32)
+        y[Y[i]] = 1
+        new_Y.append(y)
+        pass
+    return np.array(new_Y)
+
+
 
 
 #    单个数据one_hot

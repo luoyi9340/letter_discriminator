@@ -53,14 +53,14 @@ class AModel(metaclass=abc.ABCMeta):
         return pred
     
     #    测试准确率
-    def test_accuracy(self, X_test, Y_test):
+    def test_accuracy(self, X_test, Y_test, batch_size=32):
         '''跑测试集
             @param X_test: 测试集
             @param Y_test: 测试集标签
             @return: 准确率（0 ~ 1之间）
         '''
-        pred = self.test(X_test, verbose=0)
-        eq_res = np.equal(Y_test, pred)
+        pred = self.test(X_test, batch_size=batch_size)
+        eq_res = tf.equal(Y_test, pred)
         accuracy = np.mean(eq_res)
         return accuracy
     
