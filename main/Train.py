@@ -60,11 +60,11 @@ db_train = dataset.load_tensor_db(count=count, batch_size=batch_size)
 # net_weights_save_path = MODEL.get_googlelenet_v2_save_weights_path()
 
 #    初始化ResNet模型
-# model = ResNet_18(learning_rate=0.9)
+# model = ResNet_18(learning_rate=TRAIN.get_learning_rate())
 # net_weights_save_path = MODEL.get_resnet_18_save_weights_path()
-model = ResNet_34()
+model = ResNet_34(learning_rate=TRAIN.get_learning_rate())
 net_weights_save_path = MODEL.get_resnet_34_save_weights_path()
-# model = ResNet_50()
+# model = ResNet_50(learning_rate=TRAIN.get_learning_rate())
 # net_weights_save_path = MODEL.get_resnet_50_save_weights_path()
 
 model.show_info()
@@ -73,6 +73,7 @@ model.show_info()
 his = model.train_tensor_db(db_train=db_train, 
                               val_split=0.9, 
                               batch_size=TRAIN.get_train_batch_size(),
+                              epochs=TRAIN.get_epochs(),
                               auto_save_weights_after_traind=True,
                               auto_save_file_path=net_weights_save_path,
                               auto_tensorboard=True,

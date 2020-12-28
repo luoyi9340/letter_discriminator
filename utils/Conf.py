@@ -28,7 +28,13 @@ def load_conf_yaml():
     #    读取letter相关配置项
     letter = Letter(c['letter']['in'], c['letter']['count'], c['letter']['annotation'])
     #    读取train相关配置项
-    train = Train(c['train']['rate_train'], c['train']['rate_val'], c['train']['rate_test'], c['train']['batch_size'], c['train']['tensorboard_dir'])
+    train = Train(c['train']['rate_train'], 
+                  c['train']['rate_val'], 
+                  c['train']['rate_test'], 
+                  c['train']['batch_size'], 
+                  c['train']['tensorboard_dir'],
+                  c['train']['epochs'],
+                  c['train']['learning_rate'])
     model = Model(c['model']['lenet_save_weights_path'], 
                   c['model']['alexnet_save_weights_path'], 
                   c['model']['vggnet_save_weights_path'], 
@@ -55,12 +61,14 @@ class Letter:
     pass
 #    训练相关配置。为了与Java风格保持一致
 class Train:
-    def __init__(self, rate_train=0.8, rate_val=0.1, rate_test=0.1, batch_size=128, tensorboard_dir=""):
+    def __init__(self, rate_train=0.8, rate_val=0.1, rate_test=0.1, batch_size=128, tensorboard_dir="", epochs=5, learning_rate=0.1):
         self.__rate_train = rate_train
         self.__rate_val = rate_val
         self.__rate_test = rate_test
         self.__batch_size = batch_size
         self.__tensorboard_dir = tensorboard_dir
+        self.__epochs = epochs
+        self.__learning_rate = learning_rate
         pass
     
     def get_train_rate_train(self): return self.__rate_train
@@ -68,6 +76,8 @@ class Train:
     def get_train_rate_test(self): return self.__rate_test
     def get_train_batch_size(self): return self.__batch_size
     def get_tensorboard_dir(self): return self.__tensorboard_dir
+    def get_epochs(self): return self.__epochs
+    def get_learning_rate(self): return self.__learning_rate
     pass
 #    模型相关
 class Model:

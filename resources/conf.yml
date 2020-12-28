@@ -18,6 +18,10 @@ train:
    rate_test: 0.1
    #   批量大小
    batch_size: 256
+   #   epochs
+   epochs: 5
+   #   学习率
+   learning_rate: 0.1
    #   tensorboard.dir
    tensorboard_dir: /Users/irenebritney/Desktop/vcode/tensorboard
 
