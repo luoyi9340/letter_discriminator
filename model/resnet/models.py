@@ -82,32 +82,33 @@ class ResNet_18(AModel):
     #    装配模型
     def assembling(self, net):
         kernel_initializer = tf.keras.initializers.he_normal()
+        bias_initializer = tf.keras.initializers.zeros()
         
         #    layer1
         net.add(tf.keras.models.Sequential([
                 #    坑，ZeroPadding2D放在开头第一个layer时，load_weights时会失败。。。
 #                 tf.keras.layers.ZeroPadding2D(padding=1),
-                tf.keras.layers.Conv2D(name='Conv_1', filters=16, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer),
+                tf.keras.layers.Conv2D(name='Conv_1', filters=16, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer),
                 tf.keras.layers.BatchNormalization(),
                 tf.keras.layers.ReLU()
             ], name='layer_1'))
         #    BasicBlock 1
-        net.add(BasicBlock(name='BasicBlock_1_0', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_1_1', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_0', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_1', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    BasicBlock 2
-        net.add(BasicBlock(name='BasicBlock_2_0', filters=[32, 32], strides=2, input_shape=(49, 49, 64), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_1', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_0', filters=[32, 32], strides=2, input_shape=(49, 49, 64), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_1', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    BasicBlock 3
-        net.add(BasicBlock(name='BasicBlock_3_0', filters=[64, 64], strides=2, input_shape=(25, 25, 32), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_3_1', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_0', filters=[64, 64], strides=2, input_shape=(25, 25, 32), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_1', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    BasicBlock 4
-        net.add(BasicBlock(name='BasicBlock_4_0', filters=[128, 128], strides=2, input_shape=(13, 13, 64), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_4_1', filters=[128, 128], strides=1, input_shape=(7, 7, 128), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_4_0', filters=[128, 128], strides=2, input_shape=(13, 13, 64), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_4_1', filters=[128, 128], strides=1, input_shape=(7, 7, 128), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    layer2
         net.add(tf.keras.models.Sequential([
                 tf.keras.layers.GlobalAveragePooling2D(),
                 tf.keras.layers.Flatten(),
-                tf.keras.layers.Dense(46, activation='softmax')
+                tf.keras.layers.Dense(46, activation='softmax', bias_initializer=bias_initializer)
             ], name='layer_2'))
         pass
     pass
@@ -184,33 +185,34 @@ class ResNet_34(AModel):
     #    装配模型
     def assembling(self, net):
         kernel_initializer = tf.keras.initializers.he_normal()
+        bias_initializer = tf.keras.initializers.zeros()
         
         #    layer1
         net.add(tf.keras.models.Sequential([
-                tf.keras.layers.Conv2D(name='Layer_1_Conv_1', filters=16, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer),
+                tf.keras.layers.Conv2D(name='Layer_1_Conv_1', filters=16, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer),
                 tf.keras.layers.BatchNormalization(),
                 tf.keras.layers.ReLU()
             ], name='layer_1'))
         #    BasicBlock 1
-        net.add(BasicBlock(name='BasicBlock_0_0', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_0_1', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_0_2', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_0_0', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_0_1', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_0_2', filters=[16, 16], strides=1, input_shape=(49, 49, 16), output_shape=(49, 49, 16), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    BasicBlock 2
-        net.add(BasicBlock(name='BasicBlock_1_0', filters=[32, 32], strides=2, input_shape=(49, 49, 16), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_1_1', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_1_2', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_1_3', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_0', filters=[32, 32], strides=2, input_shape=(49, 49, 16), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_1', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_2', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_1_3', filters=[32, 32], strides=1, input_shape=(25, 25, 32), output_shape=(25, 25, 32), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    BasicBlock 3
-        net.add(BasicBlock(name='BasicBlock_2_0', filters=[64, 64], strides=2, input_shape=(25, 25, 32), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_1', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_2', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_3', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_4', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_2_5', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_0', filters=[64, 64], strides=2, input_shape=(25, 25, 32), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_1', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_2', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_3', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_4', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_2_5', filters=[64, 64], strides=1, input_shape=(13, 13, 64), output_shape=(13, 13, 64), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    BasicBlock 4
-        net.add(BasicBlock(name='BasicBlock_3_0', filters=[128, 128], strides=2, input_shape=(13, 13, 64), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_3_1', filters=[128, 128], strides=1, input_shape=(7, 7, 128), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer))
-        net.add(BasicBlock(name='BasicBlock_3_2', filters=[128, 128], strides=1, input_shape=(7, 7, 128), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_0', filters=[128, 128], strides=2, input_shape=(13, 13, 64), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_1', filters=[128, 128], strides=1, input_shape=(7, 7, 128), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(BasicBlock(name='BasicBlock_3_2', filters=[128, 128], strides=1, input_shape=(7, 7, 128), output_shape=(7, 7, 128), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    layer2
         net.add(tf.keras.models.Sequential([
                 tf.keras.layers.GlobalAveragePooling2D(),
@@ -300,34 +302,35 @@ class ResNet_50(AModel):
     #    装配模型
     def assembling(self, net):
         kernel_initializer = tf.keras.initializers.he_normal()
+        bias_initializer = tf.keras.initializers.zeros()
         
         #    layer1
         net.add(tf.keras.models.Sequential([
                 #    坑，ZeroPadding2D放在开头第一个layer时，load_weights时会失败。。。
-                tf.keras.layers.Conv2D(name='Layer_1_Conv_1', filters=32, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer),
+                tf.keras.layers.Conv2D(name='Layer_1_Conv_1', filters=32, kernel_size=(3, 3), strides=2, padding='valid', input_shape=(100, 100, 1), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer),
                 tf.keras.layers.BatchNormalization(),
                 tf.keras.layers.ReLU()
             ], name='layer_1'))
         #    Bottleneck 1
-        net.add(Bottleneck(name='Bottleneck_0_0', filters=[32, 32, 128], strides=1, input_shape=(49, 49, 32), output_shape=(49, 49, 128), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_0_1', filters=[32, 32, 128], strides=1, input_shape=(49, 49, 128), output_shape=(49, 49, 128), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_0_2', filters=[32, 32, 128], strides=1, input_shape=(49, 49, 128), output_shape=(49, 49, 128), kernel_initializer=kernel_initializer))
+        net.add(Bottleneck(name='Bottleneck_0_0', filters=[32, 32, 128], strides=1, input_shape=(49, 49, 32), output_shape=(49, 49, 128), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_0_1', filters=[32, 32, 128], strides=1, input_shape=(49, 49, 128), output_shape=(49, 49, 128), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_0_2', filters=[32, 32, 128], strides=1, input_shape=(49, 49, 128), output_shape=(49, 49, 128), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    Bottleneck 2
-        net.add(Bottleneck(name='Bottleneck_1_0', filters=[64, 64, 256], strides=2, input_shape=(49, 49, 128), output_shape=(25, 25, 256), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_1_1', filters=[64, 64, 256], strides=1, input_shape=(25, 25, 256), output_shape=(25, 25, 256), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_1_2', filters=[64, 64, 256], strides=1, input_shape=(25, 25, 256), output_shape=(25, 25, 256), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_1_3', filters=[64, 64, 256], strides=1, input_shape=(25, 25, 256), output_shape=(25, 25, 256), kernel_initializer=kernel_initializer))
+        net.add(Bottleneck(name='Bottleneck_1_0', filters=[64, 64, 256], strides=2, input_shape=(49, 49, 128), output_shape=(25, 25, 256), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_1_1', filters=[64, 64, 256], strides=1, input_shape=(25, 25, 256), output_shape=(25, 25, 256), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_1_2', filters=[64, 64, 256], strides=1, input_shape=(25, 25, 256), output_shape=(25, 25, 256), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_1_3', filters=[64, 64, 256], strides=1, input_shape=(25, 25, 256), output_shape=(25, 25, 256), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    Bottleneck 3
-        net.add(Bottleneck(name='Bottleneck_2_0', filters=[128, 128, 512], strides=2, input_shape=(25, 25, 256), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_2_1', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_2_2', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_2_3', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_2_4', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_2_5', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer))
+        net.add(Bottleneck(name='Bottleneck_2_0', filters=[128, 128, 512], strides=2, input_shape=(25, 25, 256), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_2_1', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_2_2', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_2_3', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_2_4', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_2_5', filters=[128, 128, 512], strides=1, input_shape=(13, 13, 512), output_shape=(13, 13, 512), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    Bottleneck 4
-        net.add(Bottleneck(name='Bottleneck_3_0', filters=[256, 256, 1024], strides=2, input_shape=(13, 13, 512), output_shape=(7, 7, 1024), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_3_1', filters=[256, 256, 1024], strides=1, input_shape=(7, 7, 1024), output_shape=(7, 7, 1024), kernel_initializer=kernel_initializer))
-        net.add(Bottleneck(name='Bottleneck_3_2', filters=[256, 256, 1024], strides=1, input_shape=(7, 7, 1024), output_shape=(7, 7, 1024), kernel_initializer=kernel_initializer))
+        net.add(Bottleneck(name='Bottleneck_3_0', filters=[256, 256, 1024], strides=2, input_shape=(13, 13, 512), output_shape=(7, 7, 1024), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_3_1', filters=[256, 256, 1024], strides=1, input_shape=(7, 7, 1024), output_shape=(7, 7, 1024), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
+        net.add(Bottleneck(name='Bottleneck_3_2', filters=[256, 256, 1024], strides=1, input_shape=(7, 7, 1024), output_shape=(7, 7, 1024), kernel_initializer=kernel_initializer, bias_initializer=bias_initializer))
         #    layer2
         net.add(tf.keras.models.Sequential([
                 tf.keras.layers.GlobalAveragePooling2D(name='Layer_2_GAP'),

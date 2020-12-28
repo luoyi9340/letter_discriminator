@@ -1,11 +1,11 @@
 #   手写字母识别（tensorflow2练手程序）
 letter:
    #   图片目录
-   in: /Users/irenebritney/Desktop/vcode/letter_2
+   in: /Users/irenebritney/Desktop/vcode/letter
    #   读取多少个图片（从标注文件读取，标注数量少于此数量时全读）
    count: 100
    #   标注文件目录
-   annotation: /Users/irenebritney/Desktop/vcode/annotation/letter_2.txt
+   annotation: /Users/irenebritney/Desktop/vcode/annotation/letter.txt
    
    
 #   训练相关配置

@@ -29,15 +29,12 @@ db_val = db.skip(count_batch_train)
 idx = random.randint(0, count)
 i = 0
 for x, y in db:
-    i += 1
-    if (i <= idx): continue
-
-        
     y = y.numpy()[0]
     y = np.argmax(y)
     print(index_category(y))
     
     x = x.numpy()[0]
+    x[x > 0] = 1
     plot.imshow(x, 'gray')
     plot.show()
     break

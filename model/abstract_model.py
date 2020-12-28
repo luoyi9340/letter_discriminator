@@ -110,7 +110,9 @@ class AModel(metaclass=abc.ABCMeta):
                                    auto_learning_rate_schedule, 
                                    auto_tensorboard, auto_tensorboard_dir)
         
+        #    貌似没什么用。。。
         db_train.repeat(epochs)
+        
         his = self._net.fit(x=db_train,
                                 validation_data=db_val,
                                 batch_size=batch_size, 
