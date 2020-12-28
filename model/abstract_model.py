@@ -114,7 +114,7 @@ class AModel(metaclass=abc.ABCMeta):
         db_train.repeat(epochs)
         
         his = self._net.fit(x=db_train,
-                                validation_data=db_val,
+                                validation_data=db_val, val_split=val_split,
                                 batch_size=batch_size, 
                                 verbose=1, 
                                 epochs=epochs,
