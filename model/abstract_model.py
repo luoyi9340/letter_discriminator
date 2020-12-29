@@ -149,7 +149,7 @@ class AModel(metaclass=abc.ABCMeta):
         #    初始化模型的各种回调
         callbacks = self.callbacks(auto_save_weights_after_traind, auto_save_file_path, 
                                    auto_learning_rate_schedule, 
-                                   auto_tensorboard, auto_tensorboard_dir)
+                                   auto_tensorboard, auto_tensorboard_dir, batch_size=batch_size)
         
         his = self._net.fit(x=X_train, y=Y_train,
                                 batch_size=batch_size, 
@@ -207,7 +207,10 @@ class AModel(metaclass=abc.ABCMeta):
             pass
         #    如果需要在训练过程中开启tensorboard监听
         if (auto_tensorboard):
-            tensorboard = tf.keras.callbacks.TensorBoard(log_dir=auto_tensorboard_dir,          #    tensorboard主目录
+            #    tensorboard目录：tensorboard根目录 + / 模型名称_b{batch_size}_lr{learning_rate}
+            tensorboard_dir = auto_tensorboard_dir + "/" + self._net.name + "_b" + str(self.batch_size) + "_lr" + str(self._net.optimizer.get_learning_rate())
+            print(tensorboard_dir)
+            tensorboard = tf.keras.callbacks.TensorBoard(log_dir=tensorboard_dir,               #    tensorboard主目录
                                                          histogram_freq=1,                      #    对于模型中各个层计算激活值和模型权重直方图的频率（训练轮数中）。 
                                                                                                 #        如果设置成 0 ，直方图不会被计算。对于直方图可视化的验证数据（或分离数据）一定要明确的指出。
                                                          write_graph=True,                      #    是否在 TensorBoard 中可视化图像。 如果 write_graph 被设置为 True
