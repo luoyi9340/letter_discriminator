@@ -48,6 +48,10 @@ model:
    resnet_50_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_50.h5
    #   DenseNet模型参数保存目录
    densenet_121: /Users/irenebritney/Desktop/vcode/models/densenet_121.h5
+   #   ResNeXt模型参数保存目录
+   resnext_50: /Users/irenebritney/Desktop/vcode/models/resnext_50.h5
+   #   CSPNet模型参数保存目录
+   csp_densenet_121: /Users/irenebritney/Desktop/vcode/models/csp_densenet_121.h5
    
    
 #   日志相关配置

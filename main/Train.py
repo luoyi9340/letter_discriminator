@@ -22,6 +22,8 @@ from model.googlelenet.v2.GoogleLeNet import GoogleLeNet_V2
 from model.VGGNet import VGGNet_16
 from model.resnet.models import ResNet_18, ResNet_34, ResNet_50
 from model.DenseNet.models import DenseNet_121
+from model.ResNeXt.models import ResNeXt_50
+from model.CSPNet.models import CSPDenseNet_121
 from data import dataset
 from utils.Conf import TRAIN, MODEL, LETTER
 
@@ -68,8 +70,16 @@ db_val = dataset.load_tensor_db(x_filedir=LETTER.get_in_val(),
 # net_weights_save_path = MODEL.get_resnet_50_save_weights_path()
 
 #    初始化DenseNet
-model = DenseNet_121(learning_rate=TRAIN.get_learning_rate(), batch_size=TRAIN.get_train_batch_size())
-net_weights_save_path = MODEL.get_densenet_121()
+# model = DenseNet_121(learning_rate=TRAIN.get_learning_rate(), batch_size=TRAIN.get_train_batch_size())
+# net_weights_save_path = MODEL.get_densenet_121()
+
+#    初始化ResNeXt
+# model = ResNeXt_50(learning_rate=TRAIN.get_learning_rate(), batch_size=TRAIN.get_train_batch_size())
+# net_weights_save_path = MODEL.get_resnext_50()
+
+#    初始化CSPDenseNet
+model = CSPDenseNet_121(learning_rate=TRAIN.get_learning_rate(), batch_size=TRAIN.get_train_batch_size())
+net_weights_save_path = MODEL.get_csp_densenet_121()
 
 model.show_info()
 
@@ -83,7 +93,6 @@ his = model.train_tensor_db(db_train=db_train,
                               auto_save_file_path=net_weights_save_path,
                               auto_tensorboard=True,
                               auto_tensorboard_dir=TRAIN.get_tensorboard_dir())
-print(his)
 
 #    保存模型参数（训练过程中会自动保存）
 # model.save_model_weights(filepath=MODEL.get_resnet_18_save_weights_path())
