@@ -35,5 +35,5 @@ def index_category(index):
     '''
     return alphabet[index]
 
-
+print(len(alphabet))
 

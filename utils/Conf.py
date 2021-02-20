@@ -44,7 +44,8 @@ def load_conf_yaml():
                   c['model']['googlelenet_v2_save_weights_path'],
                   c['model']['resnet_18_save_weights_path'],
                   c['model']['resnet_34_save_weights_path'],
-                  c['model']['resnet_50_save_weights_path'])
+                  c['model']['resnet_50_save_weights_path'],
+                  c['model']['densenet_121'])
     #    读取日志相关信息
     logs = Logs(c['logs'])
     return letter, train, model, logs
@@ -98,7 +99,8 @@ class Train:
     pass
 #    模型相关
 class Model:
-    def __init__(self, lenet_save_weights_path="", alexnet_save_weights_path="", vggnet_save_weights_path="", googlelenet_v1_save_weights_path="", googlelenet_v2_save_weights_path="", resnet_18_save_weights_path="", resnet_34_save_weights_path="", resnet_50_save_weights_path=""):
+    def __init__(self, lenet_save_weights_path="", alexnet_save_weights_path="", vggnet_save_weights_path="", googlelenet_v1_save_weights_path="", googlelenet_v2_save_weights_path="", resnet_18_save_weights_path="", resnet_34_save_weights_path="", resnet_50_save_weights_path="",
+                 densenet_121=''):
         self.__lenet_save_weights_path = lenet_save_weights_path
         self.__alexnet_save_weights_path = alexnet_save_weights_path
         self.__vggnet_save_weights_path = vggnet_save_weights_path
@@ -107,6 +109,7 @@ class Model:
         self.__resnet_18_save_weights_path = resnet_18_save_weights_path
         self.__resnet_34_save_weights_path = resnet_34_save_weights_path
         self.__resnet_50_save_weights_path = resnet_50_save_weights_path
+        self.__densenet_121 = densenet_121
         pass
     def get_lenet_save_weights_path(self): return self.__lenet_save_weights_path
     def get_alexnet_save_weights_path(self): return self.__alexnet_save_weights_path
@@ -116,6 +119,7 @@ class Model:
     def get_resnet_18_save_weights_path(self): return self.__resnet_18_save_weights_path
     def get_resnet_34_save_weights_path(self): return self.__resnet_34_save_weights_path
     def get_resnet_50_save_weights_path(self): return self.__resnet_50_save_weights_path
+    def get_densenet_121(self): return self.__densenet_121
     pass
 #    log相关配置（只有该配置信息是原始dict）
 class Logs:

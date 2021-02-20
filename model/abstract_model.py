@@ -26,6 +26,7 @@ class AModel(metaclass=abc.ABCMeta):
     '''
     def __init__(self, learning_rate=0.9, name="Model"):
         #    定义网络对象
+        self._learning_rate = learning_rate
         self._net = tf.keras.models.Sequential(name=name)
         
         #    装配网络模型
@@ -87,6 +88,7 @@ class AModel(metaclass=abc.ABCMeta):
                         db_val=None,
                         batch_size=32, 
                         epochs=5,
+                        steps_per_epoch=100,
                         auto_save_weights_after_traind=True,
                         auto_save_file_path=None,
                         auto_learning_rate_schedule=True,
@@ -110,8 +112,7 @@ class AModel(metaclass=abc.ABCMeta):
                                    auto_learning_rate_schedule, 
                                    auto_tensorboard, auto_tensorboard_dir)
         
-        #    貌似没什么用。。。
-        db_train.repeat(epochs)
+        db_train = db_train.repeat(epochs)
         
         his = self._net.fit(x=db_train,
                                 validation_data=db_val, 
@@ -119,6 +120,7 @@ class AModel(metaclass=abc.ABCMeta):
                                 verbose=1, 
                                 epochs=epochs,
                                 callbacks=callbacks,
+                                steps_per_epoch=steps_per_epoch,
                                 shuffle=False)
         return his
     #    训练模型
@@ -208,7 +210,7 @@ class AModel(metaclass=abc.ABCMeta):
         #    如果需要在训练过程中开启tensorboard监听
         if (auto_tensorboard):
             #    tensorboard目录：tensorboard根目录 + / 模型名称_b{batch_size}_lr{learning_rate}
-            tensorboard_dir = auto_tensorboard_dir + "/" + self._net.name + "_b" + str(self.batch_size) + "_lr" + str(self._net.optimizer.get_learning_rate())
+            tensorboard_dir = auto_tensorboard_dir + "/" + self._net.name + "_b" + str(self.batch_size) + "_lr" + str(self._learning_rate)
             print(tensorboard_dir)
             tensorboard = tf.keras.callbacks.TensorBoard(log_dir=tensorboard_dir,               #    tensorboard主目录
                                                          histogram_freq=1,                      #    对于模型中各个层计算激活值和模型权重直方图的频率（训练轮数中）。 

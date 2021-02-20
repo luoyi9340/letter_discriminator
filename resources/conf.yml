@@ -23,11 +23,11 @@ train:
    #   测试集占比
    rate_test: 0.1
    #   批量大小
-   batch_size: 256
+   batch_size: 32
    #   epochs
    epochs: 5
    #   学习率
-   learning_rate: 0.1
+   learning_rate: 0.01
    #   tensorboard.dir
    tensorboard_dir: /Users/irenebritney/Desktop/vcode/tensorboard
 
@@ -46,7 +46,8 @@ model:
    resnet_18_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_18.h5
    resnet_34_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_34.h5
    resnet_50_save_weights_path: /Users/irenebritney/Desktop/vcode/models/resnet_50.h5
-   
+   #   DenseNet模型参数保存目录
+   densenet_121: /Users/irenebritney/Desktop/vcode/models/densenet_121.h5
    
    
 #   日志相关配置

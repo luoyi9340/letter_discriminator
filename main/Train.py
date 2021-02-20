@@ -8,6 +8,7 @@ Created on 2020年12月16日
 '''
 import sys
 import os
+from math import ceil
 #    取项目根目录
 ROOT_PATH = os.path.abspath(os.path.dirname(__file__)).split('LetterRecognizer')[0]
 ROOT_PATH = ROOT_PATH + "LetterRecognizer"
@@ -20,10 +21,14 @@ from model.googlelenet.v1.GoogleLeNet import GoogleLeNet_V1
 from model.googlelenet.v2.GoogleLeNet import GoogleLeNet_V2
 from model.VGGNet import VGGNet_16
 from model.resnet.models import ResNet_18, ResNet_34, ResNet_50
+from model.DenseNet.models import DenseNet_121
 from data import dataset
 from utils.Conf import TRAIN, MODEL, LETTER
 
 
+train_count = LETTER.get_count_train()
+batch_size = TRAIN.get_train_batch_size()
+steps_per_epoch = ceil(train_count / batch_size)
 #    准备数据集
 db_train = dataset.load_tensor_db(x_filedir=LETTER.get_in_train(), 
                                   y_filepath=LETTER.get_label_train(), 
@@ -57,10 +62,14 @@ db_val = dataset.load_tensor_db(x_filedir=LETTER.get_in_val(),
 #    初始化ResNet模型
 # model = ResNet_18(learning_rate=TRAIN.get_learning_rate())
 # net_weights_save_path = MODEL.get_resnet_18_save_weights_path()
-model = ResNet_34(learning_rate=TRAIN.get_learning_rate())
-net_weights_save_path = MODEL.get_resnet_34_save_weights_path()
+# model = ResNet_34(learning_rate=TRAIN.get_learning_rate())
+# net_weights_save_path = MODEL.get_resnet_34_save_weights_path()
 # model = ResNet_50(learning_rate=TRAIN.get_learning_rate())
 # net_weights_save_path = MODEL.get_resnet_50_save_weights_path()
+
+#    初始化DenseNet
+model = DenseNet_121(learning_rate=TRAIN.get_learning_rate(), batch_size=TRAIN.get_train_batch_size())
+net_weights_save_path = MODEL.get_densenet_121()
 
 model.show_info()
 
@@ -69,6 +78,7 @@ his = model.train_tensor_db(db_train=db_train,
                               db_val=db_val, 
                               batch_size=TRAIN.get_train_batch_size(),
                               epochs=TRAIN.get_epochs(),
+                              steps_per_epoch=steps_per_epoch,
                               auto_save_weights_after_traind=True,
                               auto_save_file_path=net_weights_save_path,
                               auto_tensorboard=True,
